@@ -1,6 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevenueRecognitionSystem", "RevenueRecognitionSystem\RevenueRecognitionSystem.csproj", "{473239FC-5FF2-4045-BA2E-9BF0266CD9A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevenueRecognitionSystem.API", "RevenueRecognitionSystem.API\RevenueRecognitionSystem.API.csproj", "{473239FC-5FF2-4045-BA2E-9BF0266CD9A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevenueRecognitionSystem.Domain", "RevenueRecognitionSystem.Domain\RevenueRecognitionSystem.Domain.csproj", "{C3EC4F8C-0F08-45D9-9896-B401DCFC42A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevenueRecognitionSystem.Infrastructure", "RevenueRecognitionSystem.Infrastructure\RevenueRecognitionSystem.Infrastructure.csproj", "{87E37136-5308-4ABB-8D5F-557430B64757}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevenueRecognitionSystem.Application", "RevenueRecognitionSystem.Application\RevenueRecognitionSystem.Application.csproj", "{BDD61376-8BE7-442A-AE20-C6AC3A08C263}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +18,17 @@ Global
 		{473239FC-5FF2-4045-BA2E-9BF0266CD9A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{473239FC-5FF2-4045-BA2E-9BF0266CD9A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{473239FC-5FF2-4045-BA2E-9BF0266CD9A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3EC4F8C-0F08-45D9-9896-B401DCFC42A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3EC4F8C-0F08-45D9-9896-B401DCFC42A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3EC4F8C-0F08-45D9-9896-B401DCFC42A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3EC4F8C-0F08-45D9-9896-B401DCFC42A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87E37136-5308-4ABB-8D5F-557430B64757}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87E37136-5308-4ABB-8D5F-557430B64757}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87E37136-5308-4ABB-8D5F-557430B64757}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87E37136-5308-4ABB-8D5F-557430B64757}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDD61376-8BE7-442A-AE20-C6AC3A08C263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDD61376-8BE7-442A-AE20-C6AC3A08C263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDD61376-8BE7-442A-AE20-C6AC3A08C263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDD61376-8BE7-442A-AE20-C6AC3A08C263}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
