@@ -1,4 +1,6 @@
 using RevenueRecognition.Infrastructure;
+using Trip.Infrastructure;
+using TripApp.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,9 +8,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<AppDbContext>();
-// builder.Services.RegisterApplicationServices();
-// builder.Services.RegisterInfraServices();
+builder.Services.RegisterApplicationServices();
+builder.Services.RegisterInfraServices();
 
 var app = builder.Build();
 

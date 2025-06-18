@@ -18,12 +18,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Exceptions\" />
-      <Folder Include="Mappers\" />
-      <Folder Include="Services\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\RevenueRecognition.Domain\RevenueRecognition.Domain.csproj" />
     </ItemGroup>
 
