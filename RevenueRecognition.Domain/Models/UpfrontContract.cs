@@ -17,7 +17,9 @@ public class UpfrontContract
     public decimal TotalCost { get; set; }
 
     public ContractStatus Status { get; set; } 
-    
+
+    public IndividualClient? IndividualClient { get; set; }
+    public CompanyClient? CompanyClient { get; set; }
     public SoftwareProduct SoftwareProduct { get; set; } = null!;
     public ICollection<Payment> Payments { get; set; } = new List<Payment>();
 }
