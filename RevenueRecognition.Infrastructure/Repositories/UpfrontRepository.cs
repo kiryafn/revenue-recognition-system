@@ -46,11 +46,16 @@ public class UpfrontContractRepository(AppDbContext db) : IUpfrontContractReposi
         }
 
         public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
-        {
+        {   
             var c = await db.UpfrontContracts.FindAsync([id], ct);
             if (c == null) return false;
             db.UpfrontContracts.Remove(c);
             await db.SaveChangesAsync(ct);
             return true;
         }
-    }
+
+        public async Task<ICollection<UpfrontContract>> GetAllAsync(CancellationToken ct = default)
+        {
+            return await db.UpfrontContracts.ToListAsync(ct);
+        }
+}

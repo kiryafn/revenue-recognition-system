@@ -136,6 +136,30 @@ namespace RevenueRecognition.Infrastructure.Migrations
                     b.ToTable("IndividualClients", (string)null);
                 });
 
+            modelBuilder.Entity("RevenueRecognition.Domain.Models.Payment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<DateTime>("PaidAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("UpfrontContractId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UpfrontContractId");
+
+                    b.ToTable("Payments", (string)null);
+                });
+
             modelBuilder.Entity("RevenueRecognition.Domain.Models.SoftwareProduct", b =>
                 {
                     b.Property<long>("Id")
@@ -172,6 +196,60 @@ namespace RevenueRecognition.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SoftwareProducts", (string)null);
+                });
+
+            modelBuilder.Entity("RevenueRecognition.Domain.Models.UpfrontContract", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("AppliedDiscountPct")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("BaseCost")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<long>("ClientId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("SoftwareProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SoftwareProductId1")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("SoftwareVersion")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SupportYears")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalCost")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("SoftwareProductId");
+
+                    b.HasIndex("SoftwareProductId1");
+
+                    b.ToTable("UpfrontContracts", (string)null);
                 });
 
             modelBuilder.Entity("RevenueRecognition.Domain.Models.CompanyClient", b =>
@@ -271,9 +349,58 @@ namespace RevenueRecognition.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RevenueRecognition.Domain.Models.Payment", b =>
+                {
+                    b.HasOne("RevenueRecognition.Domain.Models.UpfrontContract", "UpfrontContract")
+                        .WithMany("Payments")
+                        .HasForeignKey("UpfrontContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UpfrontContract");
+                });
+
+            modelBuilder.Entity("RevenueRecognition.Domain.Models.UpfrontContract", b =>
+                {
+                    b.HasOne("RevenueRecognition.Domain.Models.CompanyClient", "CompanyClient")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RevenueRecognition.Domain.Models.IndividualClient", "IndividualClient")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RevenueRecognition.Domain.Models.SoftwareProduct", "SoftwareProduct")
+                        .WithMany()
+                        .HasForeignKey("SoftwareProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RevenueRecognition.Domain.Models.SoftwareProduct", null)
+                        .WithMany("UpfrontContracts")
+                        .HasForeignKey("SoftwareProductId1");
+
+                    b.Navigation("CompanyClient");
+
+                    b.Navigation("IndividualClient");
+
+                    b.Navigation("SoftwareProduct");
+                });
+
             modelBuilder.Entity("RevenueRecognition.Domain.Models.SoftwareProduct", b =>
                 {
                     b.Navigation("Discounts");
+
+                    b.Navigation("UpfrontContracts");
+                });
+
+            modelBuilder.Entity("RevenueRecognition.Domain.Models.UpfrontContract", b =>
+                {
+                    b.Navigation("Payments");
                 });
 #pragma warning restore 612, 618
         }

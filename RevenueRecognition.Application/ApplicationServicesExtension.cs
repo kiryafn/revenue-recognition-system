@@ -12,5 +12,11 @@ public static class ApplicationServicesExtension
         app.AddScoped<ICompanyClientService, CompanyClientService>();
         app.AddScoped<ISoftwareProductService, SoftwareProductService>();
         app.AddScoped<IDiscountService, DiscountService>();
+        app.AddScoped<IPaymentService, PaymentService>();
+        app.AddScoped<IUpfrontContractService, UpfrontContractService>();
+        app.AddScoped<IRevenueService, RevenueService>();
+        app.AddHttpClient<IExchangeRateProvider, ExchangeRateProvider>(client => {
+                client.BaseAddress = new Uri("https://api.exchangerate.host/");
+            });
     }
 }

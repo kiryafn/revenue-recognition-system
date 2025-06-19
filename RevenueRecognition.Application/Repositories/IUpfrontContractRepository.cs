@@ -11,4 +11,5 @@ public interface IUpfrontContractRepository
     Task<UpfrontContract> AddAsync(UpfrontContract contract, CancellationToken ct = default);
     Task<UpfrontContract> UpdateAsync(UpfrontContract contract, CancellationToken ct = default);
     Task<bool> DeleteAsync(long id, CancellationToken ct = default);
+    Task<ICollection<UpfrontContract>> GetAllAsync(CancellationToken ct = default);
 }
