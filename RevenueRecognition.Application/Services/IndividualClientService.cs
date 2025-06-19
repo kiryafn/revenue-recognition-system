@@ -15,21 +15,21 @@ public class IndividualClientService(IIndividualClientRepository repo) : IIndivi
         return IndividualClientMapper.ToDto(saved);
     }
 
-    public async Task<IEnumerable<IndividualClientResponseDto>> GetAllAsync()
+    public async Task<IEnumerable<IndividualClientResponseDto>> GetAllAsync(CancellationToken ct = default)
     {
-        var list = await repo.GetAllAsync();
+        var list = await repo.GetAllAsync(ct);
         return list.Select(IndividualClientMapper.ToDto);
     }
 
-    public async Task<IndividualClientResponseDto?> GetByIdAsync(long id)
+    public async Task<IndividualClientResponseDto?> GetByIdAsync(long id, CancellationToken ct = default)
     {
-        var c = await repo.GetByIdAsync(id);
+        var c = await repo.GetByIdAsync(id, ct);
         return c is not null ? IndividualClientMapper.ToDto(c) : throw new BaseExceptions.NotFoundException("Individual client not found");
     }
 
     public async Task<IndividualClientResponseDto?> UpdateAsync(long id, IndividualClientUpdateDto dto, CancellationToken ct = default)
     {
-        var c = await repo.GetByIdAsync(id);
+        var c = await repo.GetByIdAsync(id, ct);
         if (c is null) throw new BaseExceptions.NotFoundException("Individual client not found");
         
         IndividualClientMapper.Map(dto, c);
@@ -39,7 +39,7 @@ public class IndividualClientService(IIndividualClientRepository repo) : IIndivi
 
     public async Task DeleteAsync(long id, CancellationToken ct = default)
     {
-        var c = await repo.GetByIdAsync(id);
+        var c = await repo.GetByIdAsync(id, ct);
         if (c is null) throw new BaseExceptions.NotFoundException("Individual client not found");
         
         c.IsDeleted = true;

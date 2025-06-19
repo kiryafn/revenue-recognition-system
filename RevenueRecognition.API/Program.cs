@@ -1,6 +1,5 @@
+using RevenueRecognition.Application;
 using RevenueRecognition.Infrastructure;
-using Trip.Infrastructure;
-using TripApp.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 

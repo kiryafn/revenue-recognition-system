@@ -19,15 +19,126 @@ public class AppDbContext : DbContext
     
     public DbSet<CompanyClient> CompanyClients { get; set; } = null!;
     public DbSet<IndividualClient> IndividualClients { get; set; } = null!;
+    public DbSet<SoftwareProduct> SoftwareProducts { get; set; } = null!;
+    public DbSet<Discount> Discounts { get; set; } = null!;
+    public DbSet<UpfrontContract> UpfrontContracts { get; set; } = null!;
+    public DbSet<Payment> Payments { get; set; } = null!;
     
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(_connectionString);
-    }
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer(_connectionString);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<UpfrontContract>(e =>
+        {
+            e.ToTable("UpfrontContracts");
+            e.HasKey(c => c.Id);
+            e.Property(c => c.Id).ValueGeneratedOnAdd();
+
+            e.Property(c => c.SoftwareVersion)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            e.Property(c => c.StartDate).IsRequired();
+            e.Property(c => c.EndDate).IsRequired();
+            e.Property(c => c.BaseCost)
+                .IsRequired()
+                .HasColumnType("numeric(18,2)");
+            e.Property(c => c.SupportYears)
+                .IsRequired();
+            e.Property(c => c.AppliedDiscountPct)
+                .IsRequired()
+                .HasColumnType("decimal(5,2)");
+            e.Property(c => c.TotalCost)
+                .IsRequired()
+                .HasColumnType("numeric(18,2)");
+            e.Property(c => c.Status)
+                .HasConversion<int>()
+                .IsRequired();
+
+            e.HasMany(c => c.Payments)
+                .WithOne(p => p.UpfrontContract)
+                .HasForeignKey(p => p.UpfrontContractId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasOne(c => c.IndividualClient)
+                .WithMany()
+                .HasForeignKey(c => c.ClientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            e.HasOne(c => c.CompanyClient)
+                .WithMany()
+                .HasForeignKey(c => c.ClientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            e.HasOne(c => c.SoftwareProduct)
+                .WithMany(p => p.UpfrontContracts)
+                .HasForeignKey(c => c.SoftwareProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+        
+        modelBuilder.Entity<Payment>(e =>
+        {
+            e.ToTable("Payments");
+            e.HasKey(p => p.Id);
+            e.Property(p => p.Id).ValueGeneratedOnAdd();
+            e.Property(p => p.Amount)
+                .IsRequired()
+                .HasColumnType("numeric(18,2)");
+            e.Property(p => p.PaidAt)
+                .IsRequired();
+        });
+        
+        modelBuilder.Entity<SoftwareProduct>(b =>
+        {
+            b.ToTable("SoftwareProducts");
+            b.HasKey(p => p.Id);
+            b.Property(p => p.Id)
+                .ValueGeneratedOnAdd();
+
+            b.Property(p => p.Name)
+                .IsRequired()
+                .HasMaxLength(200);
+            b.Property(p => p.Description)
+                .HasMaxLength(1000);
+            b.Property(p => p.Version)
+                .IsRequired()
+                .HasMaxLength(50);
+            b.Property(p => p.Category)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            b.Property(p => p.UpfrontCost)
+                .HasColumnType("numeric(18,2)");
+            b.Property(p => p.SubscriptionCost)
+                .HasColumnType("numeric(18,2)");
+
+            b.HasMany(p => p.Discounts)
+                .WithOne(d => d.SoftwareProduct)
+                .HasForeignKey(d => d.SoftwareProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasMany<UpfrontContract>() 
+                .WithOne(c => c.SoftwareProduct)
+                .HasForeignKey(c => c.SoftwareProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Discount>(b =>
+        {
+            b.ToTable("Discounts");
+            b.HasKey(d => d.Id);
+            b.Property(d => d.Id).ValueGeneratedOnAdd();
+            b.Property(d => d.Name).IsRequired().HasMaxLength(200);
+            b.Property(d => d.Percentage)
+                .IsRequired()
+                .HasColumnType("decimal(5,2)");
+            b.Property(d => d.StartDate)
+                .IsRequired();
+            b.Property(d => d.EndDate)
+                .IsRequired();
+            b.Property(d => d.AppliesTo)
+                .HasConversion<int>(); 
+        });
         modelBuilder.Entity<CompanyClient>(builder =>
         {
             builder.ToTable("CompanyClients");

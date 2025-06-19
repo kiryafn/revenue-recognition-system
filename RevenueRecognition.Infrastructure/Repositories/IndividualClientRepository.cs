@@ -6,19 +6,19 @@ namespace RevenueRecognition.Infrastructure.Repositories;
 
 public class IndividualClientRepository(AppDbContext db) : IIndividualClientRepository
 {
-    public async Task<ICollection<IndividualClient>> GetAllAsync()
+    public async Task<ICollection<IndividualClient>> GetAllAsync(CancellationToken ct = default)
     {
         return await db.IndividualClients
             .Where(c => !c.IsDeleted) 
             .OrderBy(c => c.FirstName)
             .ThenBy(c => c.LastName)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<IndividualClient?> GetByIdAsync(long id)
+    public async Task<IndividualClient?> GetByIdAsync(long id, CancellationToken ct = default)
     {
-        return await db.IndividualClients
-            .FirstOrDefaultAsync(c => c.Id == id && !c.IsDeleted);    }
+        return await db.IndividualClients.FindAsync([id], ct);
+    }
 
     public async Task<IndividualClient> AddAsync(IndividualClient client, CancellationToken ct = default)
     {

@@ -6,16 +6,16 @@ namespace RevenueRecognition.Infrastructure.Repositories;
 
 public class CompanyClientRepository(AppDbContext db) : ICompanyClientRepository
 {
-    public async Task<ICollection<CompanyClient>> GetAllAsync()
+    public async Task<ICollection<CompanyClient>> GetAllAsync(CancellationToken ct = default)
     {
         return await db.CompanyClients
             .OrderBy(c => c.CompanyName)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<CompanyClient?> GetByIdAsync(long id)
+    public async Task<CompanyClient?> GetByIdAsync(long id, CancellationToken ct = default)
     {
-        return await db.CompanyClients.FindAsync(id);   
+        return await db.CompanyClients.FindAsync([id], ct);   
     }
 
     public async Task<CompanyClient> AddAsync(CompanyClient client, CancellationToken ct = default)

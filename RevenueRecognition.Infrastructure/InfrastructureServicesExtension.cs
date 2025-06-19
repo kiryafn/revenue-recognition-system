@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RevenueRecognition.Application.Repositories;
-using RevenueRecognition.Infrastructure;
 using RevenueRecognition.Infrastructure.Repositories;
 
-namespace Trip.Infrastructure;
+namespace RevenueRecognition.Infrastructure;
 
 public static class InfrastructureServicesExtension
 {
@@ -11,6 +10,8 @@ public static class InfrastructureServicesExtension
     {
         app.AddScoped<IIndividualClientRepository, IndividualClientRepository>();
         app.AddScoped<ICompanyClientRepository, CompanyClientRepository>();
+        app.AddScoped<ISoftwareProductRepository, SoftwareProductRepository>();
+        app.AddScoped<IDiscountRepository, DiscountRepository>();
         app.AddDbContext<AppDbContext>();
     }
 }

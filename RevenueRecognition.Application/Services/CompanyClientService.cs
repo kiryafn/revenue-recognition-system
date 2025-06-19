@@ -15,21 +15,21 @@ public class CompanyClientService(ICompanyClientRepository repo) : ICompanyClien
         return CompanyClientMapper.ToDto(saved);
     }
     
-    public async Task<IEnumerable<CompanyClientResponseDto>> GetAllAsync()
+    public async Task<IEnumerable<CompanyClientResponseDto>> GetAllAsync(CancellationToken ct = default)
     {
-        var list = await repo.GetAllAsync();
+        var list = await repo.GetAllAsync(ct);
         return list.Select(CompanyClientMapper.ToDto);
     }
 
-    public async Task<CompanyClientResponseDto?> GetByIdAsync(long id)
+    public async Task<CompanyClientResponseDto?> GetByIdAsync(long id, CancellationToken ct = default)
     {
-        var c = await repo.GetByIdAsync(id);
+        var c = await repo.GetByIdAsync(id, ct);
         return c is not null ? CompanyClientMapper.ToDto(c) : throw new BaseExceptions.NotFoundException("Company client not found");
     }
 
     public async Task<CompanyClientResponseDto?> UpdateAsync(long id, CompanyClientUpdateDto dto, CancellationToken ct = default)
     {
-        var c = await repo.GetByIdAsync(id);
+        var c = await repo.GetByIdAsync(id, ct);
         if (c is null) throw new BaseExceptions.NotFoundException("Company client not found");
         
         CompanyClientMapper.Map(dto, c);
@@ -39,7 +39,7 @@ public class CompanyClientService(ICompanyClientRepository repo) : ICompanyClien
 
     public async Task DeleteAsync(long id, CancellationToken ct = default)
     {
-        var c = await repo.GetByIdAsync(id);
+        var c = await repo.GetByIdAsync(id, ct);
         if (c is null) throw new BaseExceptions.NotFoundException("Company client not found");
         
         c.IsDeleted = true;
