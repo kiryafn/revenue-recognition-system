@@ -7,7 +7,7 @@ namespace RevenueRecognition.Application.Mappers;
 public static class CompanyClientMapper
 {
         public static CompanyClientResponseDto ToDto(CompanyClient c) =>
-            new CompanyClientResponseDto {
+            new () {
                 Id          = c.Id,
                 CompanyName = c.CompanyName,
                 Email       = c.Email,
@@ -22,7 +22,7 @@ public static class CompanyClientMapper
             };
         
         public static CompanyClient ToEntity(CompanyClientCreateDto c) =>
-            new CompanyClient {
+            new () {
                 CompanyName = c.CompanyName,
                 Email       = c.Email,
                 PhoneNumber = c.PhoneNumber,

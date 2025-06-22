@@ -6,7 +6,7 @@ namespace RevenueRecognition.Application.Mappers;
 public static class SoftwareProductMapper
 {
     public static SoftwareProductResponseDto ToDto(SoftwareProduct p) =>
-        new SoftwareProductResponseDto
+        new ()
         {
             Id               = p.Id,
             Name             = p.Name,
@@ -18,7 +18,7 @@ public static class SoftwareProductMapper
         };
 
     public static SoftwareProduct ToEntity(SoftwareProductCreateDto dto) =>
-        new SoftwareProduct
+        new ()
         {
             Name              = dto.Name,
             Description       = dto.Description,

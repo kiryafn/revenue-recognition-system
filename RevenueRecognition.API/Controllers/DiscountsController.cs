@@ -19,10 +19,18 @@ public class DiscountsController(IDiscountService svc) : ControllerBase
     public async Task<IActionResult> Get(
         long productId,
         long id,
-        CancellationToken ct) =>
-        (await svc.GetByIdAsync(id, ct)) is { } dto && dto.SoftwareProductId == productId
-            ? Ok(dto)
-            : NotFound();
+        CancellationToken ct)
+    {
+        var disc = await svc.GetByIdAsync(id, ct);
+        
+        if (disc != null && disc.SoftwareProductId == productId)
+        {
+            return Ok(disc);
+        }
+        
+        return NotFound();
+    }
+        
 
     [HttpPost]
     public async Task<IActionResult> Create(
@@ -49,10 +57,7 @@ public class DiscountsController(IDiscountService svc) : ControllerBase
     }
 
     [HttpDelete("{id:long}")]
-    public async Task<IActionResult> Delete(
-        long productId,
-        long id,
-        CancellationToken ct) =>
+    public async Task<IActionResult> Delete(long productId, long id, CancellationToken ct) =>
         await svc.DeleteAsync(id, ct)
             ? NoContent()
             : NotFound();

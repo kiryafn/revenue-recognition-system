@@ -15,10 +15,17 @@ public class SoftwareProductsController(ISoftwareProductService svc) : Controlle
         Ok(await svc.GetAllAsync(ct));
 
     [HttpGet("{id:long}")]
-    public async Task<IActionResult> Get(long id, CancellationToken ct) =>
-        (await svc.GetByIdAsync(id, ct)) is { } dto
-            ? Ok(dto)
-            : NotFound();
+    public async Task<IActionResult> Get(long id, CancellationToken ct)
+    {
+        var softwareProduct = await svc.GetByIdAsync(id, ct);
+
+        if (softwareProduct != null)
+        {
+            return Ok(softwareProduct);
+        }
+        
+        return NotFound();
+    }
 
     [HttpPost]
     public async Task<IActionResult> Create(

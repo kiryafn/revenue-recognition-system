@@ -7,7 +7,7 @@ namespace RevenueRecognition.Application.Mappers;
 public static class IndividualClientMapper
     {
         public static IndividualClientResponseDto ToDto(IndividualClient c) =>
-            new IndividualClientResponseDto {
+            new () {
                 Id          = c.Id,
                 FirstName   = c.FirstName,
                 LastName    = c.LastName,
@@ -23,7 +23,7 @@ public static class IndividualClientMapper
             };
 
         public static IndividualClient ToEntity(IndividualClientCreateDto dto) =>
-            new IndividualClient {
+            new () {
                 FirstName   = dto.FirstName,
                 LastName    = dto.LastName,
                 Email       = dto.Email,

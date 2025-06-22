@@ -11,7 +11,6 @@ public class Discount
     public DateTime      StartDate        { get; set; }
     public DateTime      EndDate          { get; set; }
 
-    // Принадлежность к продукту (если нужно глобальные скидки, сделайте SoftwareProductId nullable)
     public long          SoftwareProductId { get; set; }
     public SoftwareProduct SoftwareProduct  { get; set; } = null!;
 }
