@@ -2,6 +2,7 @@ using RevenueRecognition.Application.DTOs.Payments;
 using RevenueRecognition.Application.Repositories;
 using RevenueRecognition.Application.Services.Interfaces;
 using RevenueRecognition.Domain.Models;
+using RevenueRecognition.Domain.Models.Enums;
 
 namespace RevenueRecognition.Application.Services;
 
@@ -32,7 +33,6 @@ public class PaymentService(
 
         var saved = await payments.AddAsync(payment, ct);
 
-        // если полная оплата — меняем статус
         if (Math.Abs((paidSum + dto.Amount) - contract.TotalCost) < 0.01m)
         {
             contract.Status = ContractStatus.Signed;

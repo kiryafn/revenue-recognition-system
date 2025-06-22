@@ -8,5 +8,4 @@ public interface ICompanyClientService
     Task<CompanyClientResponseDto?> GetByIdAsync(long id, CancellationToken ct = default);
     Task<IEnumerable<CompanyClientResponseDto>> GetAllAsync(CancellationToken ct = default);
     Task<CompanyClientResponseDto?> UpdateAsync(long id, CompanyClientUpdateDto dto, CancellationToken ct = default);
-    Task DeleteAsync(long id, CancellationToken ct = default);
 }

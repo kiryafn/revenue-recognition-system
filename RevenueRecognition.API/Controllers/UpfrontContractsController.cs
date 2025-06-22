@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RevenueRecognition.Application.DTOs.Contracts.Upfront;
 using RevenueRecognition.Application.Exceptions;
@@ -6,6 +7,7 @@ using RevenueRecognition.Application.Services.Interfaces;
 namespace RevenueRecognition.API.Controllers;
 
 [ApiController]
+[Authorize]   
 [Route("api/upfront-contracts")]
 public class UpfrontContractsController(IUpfrontContractService svc) : ControllerBase
 {

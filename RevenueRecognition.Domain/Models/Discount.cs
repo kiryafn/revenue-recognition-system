@@ -1,3 +1,5 @@
+using RevenueRecognition.Domain.Models.Enums;
+
 namespace RevenueRecognition.Domain.Models;
 
 public class Discount

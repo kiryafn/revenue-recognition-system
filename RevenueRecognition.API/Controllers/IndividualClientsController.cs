@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RevenueRecognition.Application.DTOs.Clients.Individuals;
 using RevenueRecognition.Application.Exceptions;
@@ -6,6 +7,7 @@ using RevenueRecognition.Application.Services.Interfaces;
 namespace RevenueRecognition.API.Controllers;
 
 [ApiController]
+[Authorize]   
 [Route("api/individual-clients")]
 public class IndividualClientsController(IIndividualClientService svc) : ControllerBase
 {
@@ -35,6 +37,7 @@ public class IndividualClientsController(IIndividualClientService svc) : Control
     }
 
     [HttpPut("{id:long}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update(long id, [FromBody] IndividualClientUpdateDto dto, CancellationToken ct)
     {
         try
@@ -49,6 +52,7 @@ public class IndividualClientsController(IIndividualClientService svc) : Control
     }
 
     [HttpDelete("{id:long}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(long id, CancellationToken ct)
     {
         try

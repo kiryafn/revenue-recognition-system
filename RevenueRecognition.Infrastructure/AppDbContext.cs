@@ -17,12 +17,15 @@ public class AppDbContext : DbContext
                             throw new ArgumentNullException(nameof(configuration), "Connection string is not set");
     }
     
+    public DbSet<Client> Clients { get; set; } = null!;
     public DbSet<CompanyClient> CompanyClients { get; set; } = null!;
     public DbSet<IndividualClient> IndividualClients { get; set; } = null!;
     public DbSet<SoftwareProduct> SoftwareProducts { get; set; } = null!;
     public DbSet<Discount> Discounts { get; set; } = null!;
     public DbSet<UpfrontContract> UpfrontContracts { get; set; } = null!;
     public DbSet<Payment> Payments { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
+
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer(_connectionString);
 
@@ -37,9 +40,10 @@ public class AppDbContext : DbContext
             e.Property(c => c.SoftwareVersion)
                 .IsRequired()
                 .HasMaxLength(50);
-
-            e.Property(c => c.StartDate).IsRequired();
-            e.Property(c => c.EndDate).IsRequired();
+            e.Property(c => c.StartDate)
+                .IsRequired();
+            e.Property(c => c.EndDate)
+                .IsRequired();
             e.Property(c => c.BaseCost)
                 .IsRequired()
                 .HasColumnType("numeric(18,2)");
@@ -54,22 +58,15 @@ public class AppDbContext : DbContext
             e.Property(c => c.Status)
                 .HasConversion<int>()
                 .IsRequired();
-
+            
             e.HasMany(c => c.Payments)
                 .WithOne(p => p.UpfrontContract)
                 .HasForeignKey(p => p.UpfrontContractId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            e.HasOne(c => c.IndividualClient)
-                .WithMany()
+            e.HasOne(c => c.Client)
+                .WithMany()                        
                 .HasForeignKey(c => c.ClientId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            e.HasOne(c => c.CompanyClient)
-                .WithMany()
-                .HasForeignKey(c => c.ClientId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             e.HasOne(c => c.SoftwareProduct)
                 .WithMany(p => p.UpfrontContracts)
                 .HasForeignKey(c => c.SoftwareProductId)
@@ -139,95 +136,56 @@ public class AppDbContext : DbContext
             b.Property(d => d.AppliesTo)
                 .HasConversion<int>(); 
         });
-        modelBuilder.Entity<CompanyClient>(builder =>
-        {
-            builder.ToTable("CompanyClients");
-            builder.HasKey(cc => cc.Id);
-            builder.Property(cc => cc.Id)
-                .ValueGeneratedOnAdd();
-
-            builder.Property(cc => cc.CompanyName)
-                .IsRequired()
-                .HasMaxLength(200);
-            builder.Property(cc => cc.Email)
-                .IsRequired()
-                .HasMaxLength(200);
-            builder.Property(cc => cc.PhoneNumber)
-                .HasMaxLength(50);
-            builder.Property(cc => cc.KrsNumber)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            builder.OwnsOne(cc => cc.Address, a =>
+        
+         modelBuilder.Entity<Client>(b =>
             {
-                a.Property(ad => ad.Country)
-                    .HasColumnName("Country")
-                    .IsRequired()
-                    .HasMaxLength(100);
+                b.ToTable("Clients");
+                b.HasKey(c => c.Id);
+                b.Property(c => c.Id).ValueGeneratedOnAdd();
 
-                a.Property(ad => ad.City)
-                    .HasColumnName("City")
-                    .IsRequired()
-                    .HasMaxLength(100);
+                b.HasDiscriminator<string>("ClientType")
+                 .HasValue<IndividualClient>("Individual")
+                 .HasValue<CompanyClient>("Company");
 
-                a.Property(ad => ad.Street)
-                    .HasColumnName("Street")
-                    .IsRequired()
-                    .HasMaxLength(200);
+                b.Property(c => c.Email)
+                 .HasMaxLength(200)
+                 .IsRequired();
+                b.Property(c => c.PhoneNumber)
+                 .HasMaxLength(50);
+                b.Property(ic => ic.IsDeleted)
+                 .HasDefaultValue(false);
 
-                a.Property(ad => ad.PostalCode)
-                    .HasColumnName("PostalCode")
-                    .IsRequired()
-                    .HasMaxLength(20);
+                b.OwnsOne(c => c.Address, a =>
+                {
+                    a.Property(x => x.Street).HasColumnName("Street").HasMaxLength(200).IsRequired();
+                    a.Property(x => x.City).HasColumnName("City").HasMaxLength(100).IsRequired();
+                    a.Property(x => x.PostalCode).HasColumnName("PostalCode").HasMaxLength(20).IsRequired();
+                    a.Property(x => x.Country).HasColumnName("Country").HasMaxLength(100).IsRequired();
+                });
             });
-        });
 
-        modelBuilder.Entity<IndividualClient>(builder =>
-        {
-            builder.ToTable("IndividualClients");
-            builder.HasKey(ic => ic.Id);
-            builder.Property(ic => ic.Id)
-                .ValueGeneratedOnAdd();
-
-            builder.Property(ic => ic.FirstName)
-                .IsRequired()
-                .HasMaxLength(100);
-            builder.Property(ic => ic.LastName)
-                .IsRequired()
-                .HasMaxLength(100);
-            builder.Property(ic => ic.Email)
-                .IsRequired()
-                .HasMaxLength(200);
-            builder.Property(ic => ic.PhoneNumber)
-                .HasMaxLength(50);
-            builder.Property(ic => ic.Pesel)
-                .IsRequired()
-                .HasMaxLength(20);
-            builder.Property(ic => ic.IsDeleted)
-                .HasDefaultValue(false);
-
-            builder.OwnsOne(ic => ic.Address, a =>
+            modelBuilder.Entity<IndividualClient>(b =>
             {
-                a.Property(ad => ad.Country)
-                    .HasColumnName("Country")
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                a.Property(ad => ad.City)
-                    .HasColumnName("City")
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                a.Property(ad => ad.Street)
-                    .HasColumnName("Street")
-                    .IsRequired()
-                    .HasMaxLength(200);
-
-                a.Property(ad => ad.PostalCode)
-                    .HasColumnName("PostalCode")
-                    .IsRequired()
-                    .HasMaxLength(20);
+                b.Property(ic => ic.FirstName).HasMaxLength(100).IsRequired();
+                b.Property(ic => ic.LastName).HasMaxLength(100).IsRequired();
+                b.Property(ic => ic.Pesel).HasMaxLength(20).IsRequired();
+                
             });
-        });
+
+            modelBuilder.Entity<CompanyClient>(b =>
+            {
+                b.Property(cc => cc.CompanyName).HasMaxLength(200).IsRequired();
+                b.Property(cc => cc.KrsNumber).HasMaxLength(50).IsRequired();
+            });
+            
+            modelBuilder.Entity<User>(b =>
+            {
+                b.ToTable("Employees");
+                b.HasKey(e => e.Id);
+                b.Property(e => e.Id).ValueGeneratedOnAdd();
+                b.Property(e => e.Login).IsRequired().HasMaxLength(100);
+                b.Property(e => e.PasswordHash).IsRequired();
+                b.Property(e => e.Role).IsRequired().HasMaxLength(50);
+            });
     }
 }

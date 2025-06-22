@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RevenueRecognition.Application.DTOs.Revenue;
 using RevenueRecognition.Application.Services.Interfaces;
@@ -5,6 +6,7 @@ using RevenueRecognition.Application.Services.Interfaces;
 namespace RevenueRecognition.API.Controllers;
 
 [ApiController]
+[Authorize]   
 [Route("api/revenue")]
 public class RevenueController(IRevenueService svc) : ControllerBase
 {

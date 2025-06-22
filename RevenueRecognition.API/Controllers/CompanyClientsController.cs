@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RevenueRecognition.Application.DTOs.Companies;
 using RevenueRecognition.Application.Exceptions;
@@ -6,6 +7,7 @@ using RevenueRecognition.Application.Services.Interfaces;
 namespace RevenueRecognition.API.Controllers;
 
 [Controller]
+[Authorize]  
 [Route("api/company-clients")]
 public class CompanyClientsController(ICompanyClientService svc) : ControllerBase
 {
@@ -35,26 +37,13 @@ public class CompanyClientsController(ICompanyClientService svc) : ControllerBas
     }
 
     [HttpPut("{id:long}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update(long id, [FromBody] CompanyClientUpdateDto dto, CancellationToken ct)
     {
         try
         {
             var updated = await svc.UpdateAsync(id, dto, ct);
             return Ok(updated);
-        }
-        catch (BaseExceptions.NotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-    }
-
-    [HttpDelete("{id:long}")]
-    public async Task<IActionResult> Delete(long id, CancellationToken ct)
-    {
-        try
-        {
-            await svc.DeleteAsync(id, ct);
-            return NoContent();
         }
         catch (BaseExceptions.NotFoundException e)
         {

@@ -14,6 +14,8 @@ public static class InfrastructureServicesExtension
         app.AddScoped<IDiscountRepository, DiscountRepository>();
         app.AddScoped<IPaymentRepository, PaymentRepository>();
         app.AddScoped<IUpfrontContractRepository, UpfrontContractRepository>();
+        app.AddScoped<IClientRepository, ClientRepository>();
+        app.AddScoped<IUserRepository, UserRepository>();
         app.AddDbContext<AppDbContext>();
     }
 }

@@ -1,4 +1,5 @@
 using RevenueRecognition.Domain.Models;
+using RevenueRecognition.Domain.Models.Enums;
 
 namespace TripApp.Application.DTOs.Discounts;
 

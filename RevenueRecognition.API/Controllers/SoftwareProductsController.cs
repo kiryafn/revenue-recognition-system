@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RevenueRecognition.Application.Services.Interfaces;
 using TripApp.Application.DTOs.SoftwareProducts;
@@ -5,6 +6,7 @@ using TripApp.Application.DTOs.SoftwareProducts;
 namespace RevenueRecognition.API.Controllers;
 
 [ApiController]
+[Authorize]   
 [Route("api/software-products")]
 public class SoftwareProductsController(ISoftwareProductService svc) : ControllerBase
 {

@@ -2,6 +2,7 @@ using RevenueRecognition.Application.DTOs.Revenue;
 using RevenueRecognition.Application.Repositories;
 using RevenueRecognition.Application.Services.Interfaces;
 using RevenueRecognition.Domain.Models;
+using RevenueRecognition.Domain.Models.Enums;
 
 namespace RevenueRecognition.Application.Services;
 

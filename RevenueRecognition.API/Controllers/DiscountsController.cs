@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RevenueRecognition.Application.Services.Interfaces;
 using TripApp.Application.DTOs.Discounts;
@@ -5,6 +6,7 @@ using TripApp.Application.DTOs.Discounts;
 namespace RevenueRecognition.API.Controllers;
 
 [ApiController]
+[Authorize]   
 [Route("api/software-products/{productId:long}/discounts")]
 public class DiscountsController(IDiscountService svc) : ControllerBase
 {

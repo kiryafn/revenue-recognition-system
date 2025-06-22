@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RevenueRecognition.Application.Repositories;
 using RevenueRecognition.Domain.Models;
+using RevenueRecognition.Domain.Models.Enums;
 
 namespace RevenueRecognition.Infrastructure.Repositories;
 

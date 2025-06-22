@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RevenueRecognition.Application.DTOs.Payments;
 using RevenueRecognition.Application.Services.Interfaces;
@@ -5,6 +6,7 @@ using RevenueRecognition.Application.Services.Interfaces;
 namespace RevenueRecognition.API.Controllers;
 
 [ApiController]
+[Authorize]   
 [Route("api/upfront-contracts/{contractId:long}/payments")]
 public class PaymentsController(IPaymentService svc) : ControllerBase
 {

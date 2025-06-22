@@ -6,19 +6,18 @@ namespace RevenueRecognition.Infrastructure.Repositories;
 
 public class IndividualClientRepository(AppDbContext db) : IIndividualClientRepository
 {
-    public async Task<ICollection<IndividualClient>> GetAllAsync(CancellationToken ct = default)
-    {
-        return await db.IndividualClients
-            .Where(c => !c.IsDeleted) 
+    public async Task<IndividualClient?> GetByIdAsync(long id, CancellationToken ct = default) =>
+        await db.IndividualClients
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id == id && !c.IsDeleted, ct);
+
+    public async Task<ICollection<IndividualClient>> GetAllAsync(CancellationToken ct = default) =>
+        await db.IndividualClients
+            .AsNoTracking()
+            .Where(c => !c.IsDeleted)
             .OrderBy(c => c.FirstName)
             .ThenBy(c => c.LastName)
             .ToListAsync(ct);
-    }
-
-    public async Task<IndividualClient?> GetByIdAsync(long id, CancellationToken ct = default)
-    {
-        return await db.IndividualClients.FindAsync([id], ct);
-    }
 
     public async Task<IndividualClient> AddAsync(IndividualClient client, CancellationToken ct = default)
     {
@@ -27,10 +26,19 @@ public class IndividualClientRepository(AppDbContext db) : IIndividualClientRepo
         return client;
     }
 
-    public async Task<IndividualClient?> UpdateAsync(IndividualClient client, CancellationToken ct = default)
+    public async Task<IndividualClient> UpdateAsync(IndividualClient client, CancellationToken ct = default)
     {
         db.IndividualClients.Update(client);
         await db.SaveChangesAsync(ct);
         return client;
+    }
+
+    public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
+    {
+        var c = await db.IndividualClients.FindAsync([id], ct);
+        if (c == null) return false;
+        c.IsDeleted = true;
+        await db.SaveChangesAsync(ct);
+        return true;
     }
 }

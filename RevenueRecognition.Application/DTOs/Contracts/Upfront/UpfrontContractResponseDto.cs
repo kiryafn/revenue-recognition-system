@@ -1,5 +1,6 @@
 using RevenueRecognition.Application.DTOs.Payments;
 using RevenueRecognition.Domain.Models;
+using RevenueRecognition.Domain.Models.Enums;
 
 namespace RevenueRecognition.Application.DTOs.Contracts.Upfront;
 
